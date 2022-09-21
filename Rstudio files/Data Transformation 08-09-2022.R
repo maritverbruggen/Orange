@@ -163,7 +163,7 @@ for (i in seq(1, length(data$Brand))){
   }else if (data$Country[i] == "Nederland"){
     data$Valuta[i] <- "Euro"
   }else if (data$Country[i] == "Polen"){
-    data$Valuta[i] <- "Euro"
+    data$Valuta[i] <- "Zloty"
   }else if (data$Country[i] == "Qatar"){
     data$Valuta[i] <- "Qatarese Rial"
   }else if (data$Country[i] =="Saudi Arabie"){
@@ -204,6 +204,8 @@ for (i in seq(1, length(data$Brand))){
     data$Koers[i] <- "0.028"
   }else if (data$Valuta[i] == "Tunesische Dinar"){
     data$Koers[i] <- "0.31"
+  }else if (data$Valuta[i] == "Zloty"){
+    data$Koers[i] <- "0.21"
   }else{
     data$Koers[i] <- "No Koers found"
   }
@@ -2449,9 +2451,6 @@ patterns <- c("MOKAFLOR",
 data <- data[!grepl(paste(patterns, 
                                   collapse = "|"),
                                   data$Productname),]
-data_lor <- data %>% filter(Brand_Transformed == "Lavazza")
-data_lor <- data_lor %>% select(Retailer, Subbrand, Name, Volume, Productname)
-View(data_lor)
 
 View(data)
 data <- data %>%
@@ -2468,11 +2467,14 @@ data$Price_numeric <- as.numeric(stringr::str_remove(data$Price_filter, "\\.$"))
 data$Koers <- as.numeric(data$Koers)
 data$Price_in_euro <- data$Price_numeric * data$Koers
 
+
 for (i in seq(1, length(data$Retailer))){
-  if (data$Retailer[i] == "Monoprix Tunesie"){
+  if (data$Retailer[i] == "Carrefour Tunesie"){
     data$Price_in_euro[i] <- data$Price_in_euro[i] / 1000
   }
 }
+
+View(data)
 
 
 write_xlsx(data, "../Full Data/transformed_data_08_09_price_in_euro.xlsx", col_names=TRUE)
